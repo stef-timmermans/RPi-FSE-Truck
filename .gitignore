@@ -1,0 +1,5 @@
+# Ignore ArduCam dependency files
+depthai/
+depthai-python/
+pinsight_install_dependencies.sh
+
