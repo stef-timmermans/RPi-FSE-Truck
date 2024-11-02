@@ -1,7 +1,8 @@
-import tkinter as tk    # For displaying buttons on the touchscreen
-import subprocess       # For shutting down processes
-import time             # For waiting to shut down processes
-import os               # For shutting down the Pi
+import tkinter as tk        # For displaying buttons on the touchscreen
+import tkinter.ttk as ttk   # For more styled buttons
+import subprocess           # For shutting down processes
+import time                 # For waiting to shut down processes
+import os                   # For shutting down the Pi
 
 # Functions to switch camera modes
 # TODO, these need their own logic
@@ -41,22 +42,28 @@ root.title("Camera Control")
 # If not using the Raspberry Pi 7", adapt this line
 root.geometry("800x480")
 
+# Set up ttk styling
+style = ttk.Style()
+style.configure("TButton", font=("Helvetica", 14, "bold"), padding=10)
+style.configure("Mode.TButton", background="#3b5998", foreground="white")
+style.configure("Power.TButton", background="red", foreground="white")
+
 # Create a frame to hold the mode buttons and center it
 button_frame = tk.Frame(root)
 button_frame.place(relx=0.5, rely=0.5, anchor="center")
 
-# Create buttons for each mode inside the frame
-button_mode1 = tk.Button(button_frame, text="Mode 1", command=switch_to_mode_1, width=20, height=5)
-button_mode2 = tk.Button(button_frame, text="Mode 2", command=switch_to_mode_2, width=20, height=5)
-button_mode3 = tk.Button(button_frame, text="Mode 3", command=switch_to_mode_3, width=20, height=5)
+# Create ttk buttons for each mode inside the frame
+button_mode1 = ttk.Button(button_frame, text="Mode 1", command=switch_to_mode_1, style="Mode.TButton")
+button_mode2 = ttk.Button(button_frame, text="Mode 2", command=switch_to_mode_2, style="Mode.TButton")
+button_mode3 = ttk.Button(button_frame, text="Mode 3", command=switch_to_mode_3, style="Mode.TButton")
 
 # Arrange mode buttons in a grid inside the frame
 button_mode1.grid(row=0, column=0, padx=10, pady=10)
 button_mode2.grid(row=0, column=1, padx=10, pady=10)
 button_mode3.grid(row=0, column=2, padx=10, pady=10)
 
-# Place the power button in the bottom-right corner of the main window
-power_button = tk.Button(root, text="Power Off", command=power_off, width=10, height=2, fg="red")
+# Create and place the power button in the bottom-right corner of the main window
+power_button = ttk.Button(root, text="Power Off", command=power_off, style="Power.TButton")
 power_button.place(relx=0.95, rely=0.9, anchor="se")
 
 # Run the GUI loop
