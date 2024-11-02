@@ -1,8 +1,6 @@
 # FSE Truck: Raspberry Pi Camera App
 
-This repository houses the application for the University of Groningen Faculty of Science and Engineering (FSE)'s science truck Raspberry Pi application.
-
-*(TODO)*
+This repository houses the application for the University of Groningen Faculty of Science and Engineering (FSE) Science Truck's Raspberry Pi camera application.
 
 ## Hardware Dependencies
 
@@ -14,7 +12,7 @@ This application is designed to run on a Raspberry Pi setup, with the following 
 
 ## Setup Instructions
 
-1. To use the Arducam with DepthAI software, run the following script:
+1. To use the Arducam with DepthAI software, run the following commands:
 
 ```
 wget https://github.com/ArduCAM/arducam_ppa/releases/download/v1.0.2/pinsight_install_dependencies.sh
@@ -22,12 +20,13 @@ chmod +x pinsight_install_dependencies.sh
 ./pinsight_install_dependencies.sh
 ```
 
-2. To configure the Electron application to serve buttons for the touchscreen, run the following (assuming this is done directly after installing DepthAI software)
+2. To allow the Electron application to serve buttons for the touchscreen, run the following:
 ```
-cd ..
 sudo apt update
 sudo apt install nodejs npm
-mkdir
+```
+
+After this, the "frontend" of the application should work in isolation. This can be tested by running `npm start` in the `camera-control/` directory (found in root of repository).
 
 ## Using a Remote Display
 
