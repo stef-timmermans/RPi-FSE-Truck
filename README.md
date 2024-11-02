@@ -41,3 +41,32 @@ Host truck
 ```
 
 This configuration should work for most, if not all, operating systems on a secondary machine. If using the Pi's built-in HDMI support, this step is not necessary.
+
+## Starting Application From Boot
+
+Usually, SSH-ing into the Pi is not practical, especially when the application is used by general employees. For that reason, it is important to define a startup service for the Electron app (which will later call on more scripts to run the relevant libraries).
+
+From the default folder (`cd ~`), create a new file to tell the Pi what to do on startup through `sudo vim /etc/systemd/system/camera-control.service`. In this file, paste in the following configuration (replace all instances of placeholder `###` with the user name):
+
+```
+[Unit]
+Description=Start Camera Control Application
+After=network.target
+
+[Service]
+ExecStart=/bin/bash -c '/usr/bin/npm start >> /home/###/camera-control.log 2>&1'
+WorkingDirectory=/home/###/Documents/Projects/RPi-FSE-Truck/camera-control
+Restart=always
+User=###
+Environment="PATH=/home/###/Documents/Projects/RPi-FSE-Truck/camera-control/node_modules/.bin:/usr/local/bin:/usr/bin:/bin"
+
+[Install]
+WantedBy=multi-user.target
+
+```
+
+This configuration assumes that the repo was cloned in `/Documents/Projects`. It also assumes that `npm install` has been run in the frontend subfolder (`/Documents/Projects/RPi-FSE-Truck/camera-control`), which should add Electron to the node_modules binaries. If this does not happen, run `npm install electron` after installing all other dependencies.
+
+This can be enabled via `sudo systemctl enable camera-control`. Likewise, it can be disabled via `sudo systemctl disable camera-control`. After enabling, this service will run after the Pi has sucessfully booted.
+
+**Notes:** The Pi at this point expects displays to connect to, and that this service will not run in headless mode or via X11-forwarding.
