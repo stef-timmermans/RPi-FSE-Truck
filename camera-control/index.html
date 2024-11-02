@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Camera Control</title>
+    <link rel="stylesheet" href="index.css">
+</head>
+<body>
+    <!-- Define the four buttons on the touch display -->
+    <button class="button" onclick="switchMode('mode-1')">Mode 1</button>
+    <button class="button" onclick="switchMode('mode-2')">Mode 2</button>
+    <button class="button" onclick="switchMode('mode-3')">Mode 3</button>
+    <button class="button power-button" onclick="powerOff()">Power Off</button>
+
+    <!-- Define Electron connection to main.js -->
+    <script>
+        const { ipcRenderer } = require('electron')
+
+        function switchMode(mode) {
+            ipcRenderer.send('switch-mode', mode)
+        }
+
+        function powerOff() {
+            ipcRenderer.send('power-off')
+        }
+
+        // Log mode updates to standard out
+        ipcRenderer.on('update-mode', (event, mode) => {
+            console.log(`Current Mode: ${mode}`)
+            // Add GUI logic to reflect current mode if desired
+        })
+    </script>
+</body>
+</html>
