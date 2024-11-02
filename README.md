@@ -22,6 +22,13 @@ chmod +x pinsight_install_dependencies.sh
 ./pinsight_install_dependencies.sh
 ```
 
+2. To configure the Electron application to serve buttons for the touchscreen, run the following (assuming this is done directly after installing DepthAI software)
+```
+cd ..
+sudo apt update
+sudo apt install nodejs npm
+mkdir
+
 ## Using a Remote Display
 
 By default, the Raspberry Pi does not have a built-in display, thus the DepthAI software will fail when run in isolation. However, using X11-forwarding, the Pi can connect to a remote display via SSH, due to the Pi having its own connectivity hardware. On another machine, SSH to the Pi with the following configuration:

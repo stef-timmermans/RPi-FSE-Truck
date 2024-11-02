@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Camera Control</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f0f0f0;
+            font-family: Arial, sans-serif;
+        }
+        .button {
+            display: inline-block;
+            padding: 20px 40px;
+            margin: 20px;
+            font-size: 24px;
+            color: white;
+            background-color: #3b5998;
+            border: none;
+            border-radius: 15px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        .button:hover {
+            background-color: #2a4070;
+        }
+        .power-button {
+            background-color: red;
+        }
+        .power-button:hover {
+            background-color: darkred;
+        }
+    </style>
+</head>
+<body>
+    <button class="button" onclick="switchMode('repo1')">Mode 1</button>
+    <button class="button" onclick="switchMode('repo2')">Mode 2</button>
+    <button class="button" onclick="switchMode('repo3')">Mode 3</button>
+    <button class="button power-button" onclick="powerOff()">Power Off</button>
+
+    <script>
+        const { ipcRenderer } = require('electron')
+
+        function switchMode(repoName) {
+            ipcRenderer.send('switch-mode', repoName)
+        }
+
+        function powerOff() {
+            ipcRenderer.send('power-off')
+        }
+    </script>
+</body>
+</html>
