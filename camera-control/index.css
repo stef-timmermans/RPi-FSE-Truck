@@ -1,0 +1,45 @@
+/* General styling for the body */
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+    background-color: #f0f0f0;
+    font-family: Arial, sans-serif;
+    position: relative;
+}
+
+/* Styling for buttons */
+.button {
+    display: inline-block;
+    padding: 20px 40px;
+    margin: 20px;
+    font-size: 24px;
+    color: white;
+    background-color: #3b5998;
+    border: none;
+    border-radius: 15px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+/* Hover effect for buttons */
+.button:hover {
+    background-color: #2a4070;
+}
+
+/* Special styling for the Power Off button */
+.power-button {
+    background-color: red;
+    padding: 10px 20px;
+    font-size: 18px;
+    position: absolute;
+    bottom: 20px;
+    right: 20px;
+    border-radius: 10px;
+}
+
+.power-button:hover {
+    background-color: darkred;
+}

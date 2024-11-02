@@ -4,55 +4,32 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Camera Control</title>
-    <style>
-        body {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            margin: 0;
-            background-color: #f0f0f0;
-            font-family: Arial, sans-serif;
-        }
-        .button {
-            display: inline-block;
-            padding: 20px 40px;
-            margin: 20px;
-            font-size: 24px;
-            color: white;
-            background-color: #3b5998;
-            border: none;
-            border-radius: 15px;
-            cursor: pointer;
-            transition: background-color 0.3s;
-        }
-        .button:hover {
-            background-color: #2a4070;
-        }
-        .power-button {
-            background-color: red;
-        }
-        .power-button:hover {
-            background-color: darkred;
-        }
-    </style>
+    <link rel="stylesheet" href="index.css">
 </head>
 <body>
-    <button class="button" onclick="switchMode('repo1')">Mode 1</button>
-    <button class="button" onclick="switchMode('repo2')">Mode 2</button>
-    <button class="button" onclick="switchMode('repo3')">Mode 3</button>
+    <!-- Define the four buttons on the touch display -->
+    <button class="button" onclick="switchMode('mode-1')">Mode 1</button>
+    <button class="button" onclick="switchMode('mode-2')">Mode 2</button>
+    <button class="button" onclick="switchMode('mode-3')">Mode 3</button>
     <button class="button power-button" onclick="powerOff()">Power Off</button>
 
+    <!-- Define Electron connection to main.js -->
     <script>
         const { ipcRenderer } = require('electron')
 
-        function switchMode(repoName) {
-            ipcRenderer.send('switch-mode', repoName)
+        function switchMode(mode) {
+            ipcRenderer.send('switch-mode', mode)
         }
 
         function powerOff() {
             ipcRenderer.send('power-off')
         }
+
+        // Log mode updates to standard out
+        ipcRenderer.on('update-mode', (event, mode) => {
+            console.log(`Current Mode: ${mode}`)
+            // Add GUI logic to reflect current mode if desired
+        })
     </script>
 </body>
 </html>
