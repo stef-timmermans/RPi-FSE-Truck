@@ -20,13 +20,33 @@ chmod +x pinsight_install_dependencies.sh
 ./pinsight_install_dependencies.sh
 ```
 
-2. To allow the Electron application to serve buttons for the touchscreen, run the following:
+2. To use the additional software needed for the various output modes, clone the DepthAI experiments repository in the project root:
+```
+git clone https://github.com/luxonis/depthai-experiments.git
+```
+
+3. To allow the Electron application to serve buttons for the touchscreen, run the following:
 ```
 sudo apt update
 sudo apt install nodejs npm
 ```
 
-After this, the "frontend" of the application should work in isolation. This can be tested by running `npm start` in the `camera-control/` directory (found in root of repository).
+After this, the "frontend" of the application should work in isolation. This can be tested by running `npm start` in the `camera-control/` directory (found in root of repository). If all of the following appropriate steps in this document have been followed, `npm start` should run the entire application as a whole.
+
+4. To correctly install all dependencies, set up a virtual environment and install all required dependencies depending on modes from `depthai-experiments`. These instructions create an environment named `myvenv`.
+```
+python3 -m venv myvenv
+source myvenv/bin/activate
+cd depthai-experiments/gen2-age-gender
+python3 -m pip install -r requirements.txt
+cd ../gen2-emotion-recognition
+python3 -m pip install -r requirements.txt
+cd ../gen2-people-counter
+python3 -m pip install -r requirements.txt
+cd ../..
+```
+
+To leave the venv enter `deactivate`. To re-enter, type `source myvenv/bin/activate`.
 
 ## Using a Remote Display
 
@@ -41,3 +61,31 @@ Host truck
 ```
 
 This configuration should work for most, if not all, operating systems on a secondary machine. If using the Pi's built-in HDMI support, this step is not necessary.
+
+## Starting Application From Boot
+
+Usually, SSH-ing into the Pi is not practical, especially when the application is used by general employees. For that reason, it is important to define a startup service for the Electron app (which will later call on more scripts to run the relevant libraries).
+
+From the default folder (`cd ~`), create a new file to tell the Pi what to do on startup through `sudo vim /etc/systemd/system/camera-control.service`. In this file, paste in the following configuration (replace all instances of placeholder `###` with the user name):
+
+```
+[Unit]
+Description=Start Camera Control Application
+After=network.target
+
+[Service]
+ExecStart=/home/###/Documents/Projects/RPi-FSE-Truck/run.sh > /home/###/camera-control.log 2>&1
+WorkingDirectory=/home/###/Documents/Projects/RPi-FSE-Truck/camera-control
+Restart=always
+User=###
+
+[Install]
+WantedBy=multi-user.target
+
+```
+
+This configuration assumes that the repo was cloned in `/Documents/Projects` and that all appropriate dependencies have been installed as described above. It also assumes that `npm install` has been run in the frontend subfolder (`/Documents/Projects/RPi-FSE-Truck/camera-control`), which should add Electron to the node_modules binaries. If this does not happen, run `npm install electron` after installing all other dependencies.
+
+This can be enabled via `sudo systemctl enable camera-control`. Likewise, it can be disabled via `sudo systemctl disable camera-control`. After enabling, this service will run after the Pi has sucessfully booted.
+
+**Note:** The Pi at this point expects displays to connect to; this service will not run in headless mode or via X11-forwarding.
