@@ -74,11 +74,10 @@ Description=Start Camera Control Application
 After=network.target
 
 [Service]
-ExecStart=/bin/bash -c '/usr/bin/npm start >> /home/###/camera-control.log 2>&1'
+ExecStart=/home/###/Documents/Projects/RPi-FSE-Truck/run.sh > /home/###/camera-control.log 2>&1
 WorkingDirectory=/home/###/Documents/Projects/RPi-FSE-Truck/camera-control
 Restart=always
 User=###
-Environment="PATH=/home/###/Documents/Projects/RPi-FSE-Truck/camera-control/node_modules/.bin:/usr/local/bin:/usr/bin:/bin"
 
 [Install]
 WantedBy=multi-user.target
