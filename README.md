@@ -69,4 +69,4 @@ This configuration assumes that the repo was cloned in `/Documents/Projects`. It
 
 This can be enabled via `sudo systemctl enable camera-control`. Likewise, it can be disabled via `sudo systemctl disable camera-control`. After enabling, this service will run after the Pi has sucessfully booted.
 
-**Notes:** The Pi at this point expects displays to connect to, and that this service will not run in headless mode or via X11-forwarding.
+**Note:** The Pi at this point expects displays to connect to; this service will not run in headless mode or via X11-forwarding.
