@@ -2,3 +2,6 @@
 depthai/
 depthai-python/
 pinsight_install_dependencies.sh
+
+# Ignore depthai experiments
+depthai-experiments/

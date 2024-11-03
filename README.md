@@ -20,13 +20,18 @@ chmod +x pinsight_install_dependencies.sh
 ./pinsight_install_dependencies.sh
 ```
 
-2. To allow the Electron application to serve buttons for the touchscreen, run the following:
+2. To use the additional software needed for the various output modes, clone the DepthAI experiments repository in the project root:
+```
+git clone https://github.com/luxonis/depthai-experiments.git
+```
+
+3. To allow the Electron application to serve buttons for the touchscreen, run the following:
 ```
 sudo apt update
 sudo apt install nodejs npm
 ```
 
-After this, the "frontend" of the application should work in isolation. This can be tested by running `npm start` in the `camera-control/` directory (found in root of repository).
+After this, the "frontend" of the application should work in isolation. This can be tested by running `npm start` in the `camera-control/` directory (found in root of repository). If everything has been cloned in the correct place, `npm start` should run the entire application as a whole.
 
 ## Using a Remote Display
 
