@@ -31,7 +31,22 @@ sudo apt update
 sudo apt install nodejs npm
 ```
 
-After this, the "frontend" of the application should work in isolation. This can be tested by running `npm start` in the `camera-control/` directory (found in root of repository). If everything has been cloned in the correct place, `npm start` should run the entire application as a whole.
+After this, the "frontend" of the application should work in isolation. This can be tested by running `npm start` in the `camera-control/` directory (found in root of repository). If all of the following appropriate steps in this document have been followed, `npm start` should run the entire application as a whole.
+
+4. To correctly install all dependencies, set up a virtual environment and install all required dependencies depending on modes from `depthai-experiments`. These instructions create an environment named `myvenv`.
+```
+python3 -m venv myvenv
+source myvenv/bin/activate
+cd depthai-experiments/gen2-age-gender
+python3 -m pip install -r requirements.txt
+cd ../gen2-emotion-recognition
+python3 -m pip install -r requirements.txt
+cd ../gen2-people-counter
+python3 -m pip install -r requirements.txt
+cd ../..
+```
+
+To leave the venv enter `deactivate`. To re-enter, type `source myvenv/bin/activate`.
 
 ## Using a Remote Display
 
@@ -70,7 +85,7 @@ WantedBy=multi-user.target
 
 ```
 
-This configuration assumes that the repo was cloned in `/Documents/Projects`. It also assumes that `npm install` has been run in the frontend subfolder (`/Documents/Projects/RPi-FSE-Truck/camera-control`), which should add Electron to the node_modules binaries. If this does not happen, run `npm install electron` after installing all other dependencies.
+This configuration assumes that the repo was cloned in `/Documents/Projects` and that all appropriate dependencies have been installed as described above. It also assumes that `npm install` has been run in the frontend subfolder (`/Documents/Projects/RPi-FSE-Truck/camera-control`), which should add Electron to the node_modules binaries. If this does not happen, run `npm install electron` after installing all other dependencies.
 
 This can be enabled via `sudo systemctl enable camera-control`. Likewise, it can be disabled via `sudo systemctl disable camera-control`. After enabling, this service will run after the Pi has sucessfully booted.
 

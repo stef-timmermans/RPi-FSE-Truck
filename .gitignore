@@ -5,3 +5,7 @@ pinsight_install_dependencies.sh
 
 # Ignore depthai experiments
 depthai-experiments/
+
+# Ignore virual environments
+venv/
+myvenv/
