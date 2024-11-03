@@ -88,4 +88,22 @@ This configuration assumes that the repo was cloned in `/Documents/Projects` and
 
 This can be enabled via `sudo systemctl enable camera-control`. Likewise, it can be disabled via `sudo systemctl disable camera-control`. After enabling, this service will run after the Pi has sucessfully booted.
 
+If wanting to run a single library in isolation, have a new service configuration file. The `single_library.sh` in the project root is an example that can be called. An example is as follows (replace all instances of placeholder `###` with the user name):
+
+```
+[Unit]
+Description=Run gen2-age-gender Application
+After=network.target
+
+[Service]
+ExecStart=/home/###/Documents/Projects/RPi-FSE-Truck/single_library.sh > /home/###/gen2-age-gender.log 2>&1
+WorkingDirectory=/home/###/Documents/Projects/RPi-FSE-Truck/depthai-experiments/gen2-age-gender
+Restart=always
+User=###
+
+[Install]
+WantedBy=multi-user.target
+
+```
+
 **Note:** The Pi at this point expects displays to connect to; this service will not run in headless mode or via X11-forwarding.
