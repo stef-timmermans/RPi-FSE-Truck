@@ -71,7 +71,7 @@ From the default folder (`cd ~`), create a new file to tell the Pi what to do on
 ```
 [Unit]
 Description=Start Camera Control Application
-After=network.target
+After=multi-user.target
 
 [Service]
 ExecStart=/home/###/Documents/Projects/RPi-FSE-Truck/run.sh > /home/###/camera-control.log 2>&1
@@ -93,7 +93,7 @@ If wanting to run a single library in isolation, have a new service configuratio
 ```
 [Unit]
 Description=Run gen2-age-gender Application
-After=network.target
+After=multi-user.target
 
 [Service]
 ExecStart=/home/###/Documents/Projects/RPi-FSE-Truck/single_library.sh > /home/###/gen2-age-gender.log 2>&1
