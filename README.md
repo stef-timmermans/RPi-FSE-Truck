@@ -2,6 +2,8 @@
 
 This repository houses the application for the University of Groningen Faculty of Science and Engineering (FSE) Science Truck's Raspberry Pi camera application.
 
+[**Read more about the FSE Truck here!**](https://jouwenergievanmorgen.nl)
+
 ## Hardware Dependencies
 
 This application is designed to run on a Raspberry Pi setup, with the following hardware configuration:
@@ -37,9 +39,7 @@ After this, the "frontend" of the application should work in isolation. This can
 ```
 python3 -m venv myvenv
 source myvenv/bin/activate
-cd depthai-experiments/gen2-age-gender
-python3 -m pip install -r requirements.txt
-cd ../gen2-emotion-recognition
+cd depthai-experiments/gen2-emotion-recognition
 python3 -m pip install -r requirements.txt
 cd ../gen2-people-counter
 python3 -m pip install -r requirements.txt
@@ -48,34 +48,22 @@ cd ../..
 
 To leave the venv enter `deactivate`. To re-enter, type `source myvenv/bin/activate`.
 
-## Using a Remote Display
-
-By default, the Raspberry Pi does not have a built-in display, thus the DepthAI software will fail when run in isolation. However, using X11-forwarding, the Pi can connect to a remote display via SSH, due to the Pi having its own connectivity hardware. On another machine, SSH to the Pi with the following configuration:
-
-```
-Host truck
-    HostName ####
-    User ####
-    ForwardX11 yes
-    ForwardX11Trusted yes
-```
-
-This configuration should work for most, if not all, operating systems on a secondary machine. If using the Pi's built-in HDMI support, this step is not necessary.
-
 ## Starting Application From Boot
+
+***Note:** The Pi at this point expects displays to connect to; the full application will not run in headless mode or via X11-forwarding unless using a more nuanced configuration (possibly through RealVNC).*
 
 Usually, SSH-ing into the Pi is not practical, especially when the application is used by general employees. For that reason, it is important to define a startup service for the Electron app (which will later call on more scripts to run the relevant libraries).
 
-From the default folder (`cd ~`), create a new file to tell the Pi what to do on startup through `sudo vim /etc/systemd/system/camera-control.service`. In this file, paste in the following configuration (replace all instances of placeholder `###` with the user name):
+Create a new file to tell the Pi what to do on startup through `sudo vim /etc/systemd/system/camera-control.service`. In this file, paste in the following configuration (replace all instances of placeholder `###` with the user name):
 
 ```
 [Unit]
 Description=Start Camera Control Application
-After=multi-user.target
+After=network.target
 
 [Service]
 ExecStart=/home/###/Documents/Projects/RPi-FSE-Truck/run.sh > /home/###/camera-control.log 2>&1
-WorkingDirectory=/home/###/Documents/Projects/RPi-FSE-Truck/camera-control
+WorkingDirectory=/home/###/Documents/Projects/RPi-FSE-Truck
 Restart=always
 User=###
 
@@ -88,16 +76,16 @@ This configuration assumes that the repo was cloned in `/Documents/Projects` and
 
 This can be enabled via `sudo systemctl enable camera-control`. Likewise, it can be disabled via `sudo systemctl disable camera-control`. After enabling, this service will run after the Pi has sucessfully booted.
 
-If wanting to run a single library in isolation, have a new service configuration file. The `single_library.sh` in the project root is an example that can be called. An example is as follows (replace all instances of placeholder `###` with the user name):
+If wanting to run a single library in isolation, define a different service file. The `single_library.sh` in the project root is an example that can be called. An example is as follows (replace all instances of placeholder `###` with the user name):
 
 ```
 [Unit]
-Description=Run gen2-age-gender Application
-After=multi-user.target
+Description=Run DepthAI Default Application
+After=network.target
 
 [Service]
-ExecStart=/home/###/Documents/Projects/RPi-FSE-Truck/single_library.sh > /home/###/gen2-age-gender.log 2>&1
-WorkingDirectory=/home/###/Documents/Projects/RPi-FSE-Truck/depthai-experiments/gen2-age-gender
+ExecStart=/home/###/Documents/Projects/RPi-FSE-Truck/single_library.sh > /home/###/depthai-test.log 2>&1
+WorkingDirectory=/home/###/Documents/Projects/RPi-FSE-Truck
 Restart=always
 User=###
 
@@ -106,4 +94,16 @@ WantedBy=multi-user.target
 
 ```
 
-**Note:** The Pi at this point expects displays to connect to; this service will not run in headless mode or via X11-forwarding.
+## Using a Remote Display
+
+By default, the Raspberry Pi does not have a built-in display, thus the DepthAI software will fail when run in isolation. However, using X11-forwarding, the Pi can connect to a remote display via SSH, due to the Pi having its own connectivity hardware. This can be useful when testing individual libraries or the frontend in isolation. On another machine, SSH to the Pi with the following configuration:
+
+```
+Host truck
+    HostName ####
+    User ####
+    ForwardX11 yes
+    ForwardX11Trusted yes
+```
+
+This configuration should work for most, if not all, operating systems on a secondary machine. If using the Pi's built-in HDMI support, this step is not necessary.
