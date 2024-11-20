@@ -54,7 +54,7 @@ To leave the venv enter `deactivate`. To re-enter, type `source myvenv/bin/activ
 
 Usually, SSH-ing into the Pi is not practical, especially when the application is used by general employees. For that reason, it is important to define a startup service for the Electron app (which will later call on more scripts to run the relevant libraries).
 
-Create a new file to tell the Pi what to do on startup through `sudo vim /etc/systemd/system/camera-control.service`. In this file, paste in the following configuration (replace all instances of placeholder `###` with the user name):
+Create a new file to tell the Pi what to do on startup through `sudo vim /etc/systemd/system/camera-control.service`. In this file, paste in the following configuration (replace all instances of placeholder `###` with the user name and `????:????` with the ID of the camera):
 
 ```
 [Unit]
@@ -84,10 +84,10 @@ Description=Run DepthAI Default Application
 After=network.target
 
 [Service]
+ExecStartPre=/bin/bash -c 'while ! lsusb | grep -q "????:????"; do sleep 2; done'
 ExecStart=/home/###/Documents/Projects/RPi-FSE-Truck/single_library.sh > /home/###/depthai-test.log 2>&1
 WorkingDirectory=/home/###/Documents/Projects/RPi-FSE-Truck
 Restart=always
-User=###
 
 [Install]
 WantedBy=multi-user.target
