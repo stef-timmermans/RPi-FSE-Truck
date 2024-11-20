@@ -1,12 +1,14 @@
 #!/bin/bash
 
-# This is called by the camera control service
+# NOTE: Script assumes myvenv contains installs for the program
+
+# Navigate to the working directory and start the demo app in isolation
+# This should be done by the WorkingDirectory parameter in the service file
+# which calls this script.
 
 # Activate virtual environment
-# Replace with actual path, below is an example with user fse
-source /home/fse/Documents/Projects/RPi-FSE-Truck/myvenv/bin/activate
+source myvenv/bin/activate
 
-# Navigate to the working directory and start the gen-2-age-gender app in isolation
-# Replace with actual path, below is an example with user fse
-cd /home/fse/Documents/Projects/RPi-FSE-Truck/depthai-experiments/gen2-age-gender
-python3 main.py
+# Go to app directory and run
+cd depthai
+python depthai_demo.py
