@@ -2,7 +2,7 @@
 
 This repository houses the application for the University of Groningen Faculty of Science and Engineering (FSE) Science Truck's Raspberry Pi camera application.
 
-[**Read more about the FSE Truck here!**](https://jouwenergievanmorgen.nl)
+### [**Learn more about the FSE Truck!**](https://jouwenergievanmorgen.nl)
 
 ## Hardware Dependencies
 
@@ -44,6 +44,7 @@ python3 -m pip install -r requirements.txt
 cd ../gen2-people-counter
 python3 -m pip install -r requirements.txt
 cd ../..
+# List still being finalized...
 ```
 
 To leave the venv enter `deactivate`. To re-enter, type `source myvenv/bin/activate`.
@@ -62,10 +63,10 @@ Description=Start Camera Control Application
 After=network.target
 
 [Service]
+ExecStartPre=/bin/bash -c 'while ! lsusb | grep -q "????:????"; do sleep 2; done'
 ExecStart=/home/###/Documents/Projects/RPi-FSE-Truck/run.sh > /home/###/camera-control.log 2>&1
 WorkingDirectory=/home/###/Documents/Projects/RPi-FSE-Truck
 Restart=always
-User=###
 
 [Install]
 WantedBy=multi-user.target
