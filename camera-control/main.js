@@ -1,5 +1,5 @@
 const { app, BrowserWindow, ipcMain } = require('electron')
-const { spawn } = require('child_process')
+const { spawn, exec } = require('child_process')
 
 // Disable hardware acceleration
 // Raspberry Pi does not support OpenGL calls
@@ -56,7 +56,12 @@ ipcMain.on('switch-mode', (event, mode) => {
                 // Start the first camera library
                 // Replace dummy script call with functional script
                 console.log("\nCalling script for child process #1...")
-                currentProcess = spawn('./scripts/dummy.sh')
+                currentProcess = spawn('./scripts/library1.sh')
+
+                // Can call dummy script here to verify signal handling
+                // Uncomment the line below and comment out the spawn
+                // to library1.sh
+                // currentProcess = spawn('./scripts/dummy.sh')
                 break
             case 'mode-2':
                 // Start the second camera library
