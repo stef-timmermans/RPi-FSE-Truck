@@ -24,21 +24,13 @@ function createWindow() {
         }
     })
 
+    // Use the index html file for the window
     win.loadFile('index.html')
 
     // Send the initial mode to the renderer process on window load
     win.webContents.on('did-finish-load', () => {
         win.webContents.send('update-mode', currentMode)
     })
-}
-
-// Function to stop the current process
-function stopCurrentProcess(signal = 'SIGINT') {
-    if (currentProcess) {
-        console.log(`Stopping process with PID: ${currentProcess.pid}`)
-        currentProcess.kill(signal)
-        currentProcess = null
-    }
 }
 
 // IPC listener to switch modes with unique behaviors
@@ -79,6 +71,7 @@ ipcMain.on('switch-mode', (event, mode) => {
                 break
         }
 
+        // Log relevant process information
         if (currentProcess) {
             currentProcess.stdout.on('data', (data) => {
                 console.log(`Process Output: ${data}`)
@@ -97,6 +90,16 @@ ipcMain.on('switch-mode', (event, mode) => {
         event.sender.send('update-mode', currentMode)
     }
 })
+
+// Stops the current process (delivers a SIGINT signal to the child)
+function stopCurrentProcess(signal = 'SIGINT') {
+    if (currentProcess) {
+        console.log(`Stopping process with PID: ${currentProcess.pid}`)
+        currentProcess.kill(signal)
+        // Set current process to default
+        currentProcess = null
+    }
+}
 
 // IPC listener for the power-off button
 ipcMain.on('power-off', () => {
