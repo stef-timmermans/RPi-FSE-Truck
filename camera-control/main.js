@@ -1,5 +1,5 @@
 const { app, BrowserWindow, ipcMain } = require('electron')
-const { exec } = require('child_process')
+const { spawn } = require('child_process')
 
 // Disable hardware acceleration
 // Raspberry Pi does not support OpenGL calls
@@ -9,6 +9,7 @@ app.commandLine.appendSwitch('disable-software-rasterizer')
 
 // Track the current state, starting in mode-0 (no camera program selected)
 let currentMode = 'mode-0'
+let currentProcess = null // Reference to the currently running child process
 
 // Define a window for the GUI
 function createWindow() {
@@ -31,28 +32,20 @@ function createWindow() {
     })
 }
 
-app.whenReady().then(createWindow)
+// Function to stop the current process
+function stopCurrentProcess(signal = 'SIGINT') {
+    if (currentProcess) {
+        console.log(`Stopping process with PID: ${currentProcess.pid}`)
+        currentProcess.kill(signal)
+        currentProcess = null
+    }
+}
 
 // IPC listener to switch modes with unique behaviors
 ipcMain.on('switch-mode', (event, mode) => {
     if (mode !== currentMode) {
         // Stop the current mode with unique behavior based on its type
-        switch (currentMode) {
-            case 'mode-1':
-                // Required CD and kill process behavior for mode-1
-                exec('pkill -SIGINT python')
-                break
-            case 'mode-2':
-                // Required CD and kill process behavior for mode-2
-                exec('pkill -SIGTERM python')
-                break
-            case 'mode-3':
-                // Required CD and kill process behavior for mode-3
-                break
-            default:
-                // In mode-0, no behavior required
-                break
-        }
+        stopCurrentProcess()
 
         // Update the mode and start the new process with unique behavior
         // It is necessary that the PWD of execution is /camera-control at
@@ -61,37 +54,35 @@ ipcMain.on('switch-mode', (event, mode) => {
         switch (mode) {
             case 'mode-1':
                 // Start the first camera library
-                exec(`python3 /path/to/repo1/script.py`, (error, stdout, stderr) => {
-                    if (error) {
-                        console.error(`Mode 1 Error: ${error.message}`)
-                        return
-                    }
-                    console.log(`Mode 1 Output: ${stdout}`)
-                })
+                // Replace dummy script call with functional script
+                currentProcess = spawn('./scripts/dummy.sh')
                 break
             case 'mode-2':
                 // Start the second camera library
-                exec(`python3 /path/to/repo2/script.py`, (error, stdout, stderr) => {
-                    if (error) {
-                        console.error(`Mode 2 Error: ${error.message}`)
-                        return
-                    }
-                    console.log(`Mode 2 Output: ${stdout}`)
-                })
+                currentProcess = spawn('python3', ['/path/to/repo2/main.py'])
                 break
             case 'mode-3':
                 // Start the third camera library
-                exec(`python3 /path/to/repo3/script.py`, (error, stdout, stderr) => {
-                    if (error) {
-                        console.error(`Mode 3 Error: ${error.message}`)
-                        return
-                    }
-                    console.log(`Mode 3 Output: ${stdout}`)
-                })
+                currentProcess = spawn('python3', ['/path/to/repo3/main.py'])
                 break
             default:
                 // In mode-0, no behavior required
+                currentProcess = null
                 break
+        }
+
+        if (currentProcess) {
+            currentProcess.stdout.on('data', (data) => {
+                console.log(`Process Output: ${data}`)
+            })
+
+            currentProcess.stderr.on('data', (data) => {
+                console.error(`Process Error: ${data}`)
+            })
+
+            currentProcess.on('close', (code) => {
+                console.log(`Process exited with code: ${code}`)
+            })
         }
 
         // Inform the renderer process of the new mode
@@ -101,6 +92,7 @@ ipcMain.on('switch-mode', (event, mode) => {
 
 // IPC listener for the power-off button
 ipcMain.on('power-off', () => {
+    stopCurrentProcess()
     exec('sudo poweroff', (error, stdout, stderr) => {
         if (error) {
             console.error(`Power Off Error: ${error.message}`)
@@ -113,5 +105,11 @@ ipcMain.on('power-off', () => {
 // Close the application if the output GUI is deactivated
 // This is handy when debugging (closing page on X11 will stop execution)
 app.on('window-all-closed', () => {
+    stopCurrentProcess()
     app.quit()
+})
+
+// Run the GUI after the electron app loads
+app.whenReady().then(() => {
+    createWindow()
 })

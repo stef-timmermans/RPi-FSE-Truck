@@ -1,6 +1,11 @@
 #!/bin/bash
 
-# This can be called by the main app to ensure that
-# the SIGINT signal is correctly handled by the child
-# process.
-node dummy.js
+# This can be called by the main app to ensure that the SIGINT 
+# signal correctly terminates the child process
+
+# Set the current work directory to be the effective work
+# directory
+SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
+
+# Run dummy.js using Node.js with its full path
+node "$SCRIPT_DIR/dummy.js"
