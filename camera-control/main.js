@@ -9,7 +9,7 @@ app.commandLine.appendSwitch('disable-software-rasterizer')
 
 // Track the current state, starting in mode-0 (no camera program selected)
 let currentMode = 'mode-0'
-let currentProcess = null // Reference to the currently running child process
+let currentProcess = null
 
 // Define a window for the GUI
 function createWindow() {
@@ -55,15 +55,18 @@ ipcMain.on('switch-mode', (event, mode) => {
             case 'mode-1':
                 // Start the first camera library
                 // Replace dummy script call with functional script
+                console.log("\nCalling script for child process #1...")
                 currentProcess = spawn('./scripts/dummy.sh')
                 break
             case 'mode-2':
                 // Start the second camera library
-                currentProcess = spawn('python3', ['/path/to/repo2/main.py'])
+                console.log("\nCalling script for child process #2...")
+                currentProcess = spawn('./scripts/library2.sh')
                 break
             case 'mode-3':
                 // Start the third camera library
-                currentProcess = spawn('python3', ['/path/to/repo3/main.py'])
+                console.log("\nCalling script for child process #3...")
+                currentProcess = spawn('./scripts/library3.sh')
                 break
             default:
                 // In mode-0, no behavior required
