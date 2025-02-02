@@ -13,7 +13,7 @@ DEPTHAI_EXP_DIR="$SCRIPT_DIR/../../depthai-experiments"
 cd "$DEPTHAI_EXP_DIR" || exit 1
 
 # Naviage to the emotion recognition directory
-cd gen2-emotion-recognition
+cd gen2-emotion-recognition || exit 1
 
 # Run the application
 python main.py
