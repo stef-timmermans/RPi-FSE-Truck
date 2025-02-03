@@ -35,17 +35,9 @@ sudo apt install nodejs npm
 
 After this, the "frontend" of the application should work in isolation. This can be tested by running `npm start` in the `camera-control/` directory (found in root of repository). If all of the following appropriate steps in this document have been followed, `npm start` should run the entire application as a whole.
 
-4. To correctly install all dependencies, set up a virtual environment and install all required dependencies depending on modes from `depthai-experiments`. These instructions create an environment named `myvenv`.
+4. To correctly install all dependencies, set up a virtual environment and install all required dependencies depending on modes from `depthai-experiments`. This script creates a single virtual environment for all dependencies, and only needs to be run once:
 ```
-python3 -m venv myvenv
-source myvenv/bin/activate
-cd depthai
-python3 -m pip install -r requirments.txt
-cd ../depthai-experiments/gen2-emotion-recognition
-python3 -m pip install -r requirements.txt
-cd ../gen2-people-counter
-python3 -m pip install -r requirements.txt
-cd ../..
+./setup_venv.sh
 ```
 
 To leave the venv enter `deactivate`. To re-enter, type `source myvenv/bin/activate`.
