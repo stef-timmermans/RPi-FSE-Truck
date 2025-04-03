@@ -3,6 +3,14 @@
 # Exit script on any command failure
 set -e
 
+# Ensure DepthAI default programs exist
+cd depthai
+cd ..
+
+# Ensure DepthAI Experiments programs exist
+cd depthai-experiments
+cd ..
+
 # Create a Python virtual environment
 python3 -m venv myvenv
 
