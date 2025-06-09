@@ -1,11 +1,18 @@
 const { app, BrowserWindow, ipcMain } = require('electron')
 const { spawn, exec } = require('child_process')
+const path = require('path')
 
 // Disable hardware acceleration
 // Raspberry Pi does not support OpenGL calls
 app.disableHardwareAcceleration()
 app.commandLine.appendSwitch('disable-gpu')
 app.commandLine.appendSwitch('disable-software-rasterizer')
+
+// PiNSIGHT paths (assuming correct install)
+const demoPath = path.join(__dirname, '..', 'depthai', 'depthai_demo.py');
+const emotionPath = path.join(__dirname, '..', 'depthai-experiments', 'gen2-emotion-recognition', 'main.py');
+const peoplePath = path.join(__dirname, '..', 'depthai-experiments', 'gen2-people-counter', 'main.py');
+
 
 // Track the current state, starting in mode-0 (no camera program selected)
 let currentMode = 'mode-0'
@@ -26,18 +33,19 @@ function createWindow() {
 
     // Use the index html file for the window
     win.loadFile('index.html')
-
-    // Send the initial mode to the renderer process on window load
-    win.webContents.on('did-finish-load', () => {
-        win.webContents.send('update-mode', currentMode)
-    })
-}
+        .then(() => {
+          win.webContents.send('update-mode', currentMode)
+        })
+        .catch(err => {
+          console.error('Failed to load index.html:', err)
+        })
+    }
 
 // IPC listener to switch modes with unique behaviors
-ipcMain.on('switch-mode', (event, mode) => {
+ipcMain.on('switch-mode', async (event, mode) => {
     if (mode !== currentMode) {
-        // Stop the current mode with unique behavior based on its type
-        stopCurrentProcess()
+        // Stop the current mode
+        await stopCurrentProcess()
 
         // Update the mode and start the new process with unique behavior
         // It is necessary that the PWD of execution is /camera-control at
@@ -45,25 +53,19 @@ ipcMain.on('switch-mode', (event, mode) => {
         currentMode = mode
         switch (mode) {
             case 'mode-1':
-                // Start the first camera library
-                // Replace dummy script call with functional script
+                // Start the first camera library: DepthAI Demo
                 console.log("\nCalling script for child process #1...")
-                currentProcess = spawn('./scripts/library1.sh')
-
-                // Can call dummy script here to verify signal handling
-                // Uncomment the line below and comment out the spawn
-                // to library1.sh
-                // currentProcess = spawn('./scripts/dummy.sh')
+                currentProcess = spawn('python', [demoPath], {shell: true})
                 break
             case 'mode-2':
-                // Start the second camera library
+                // Start the second camera library: Emotion Recognition
                 console.log("\nCalling script for child process #2...")
-                currentProcess = spawn('./scripts/library2.sh')
+                currentProcess = spawn('python', [emotionPath], {shell: true})
                 break
             case 'mode-3':
-                // Start the third camera library
+                // Start the third camera library: People Counter
                 console.log("\nCalling script for child process #3...")
-                currentProcess = spawn('./scripts/library3.sh')
+                currentProcess = spawn('python', [peoplePath], {shell: true})
                 break
             default:
                 // In mode-0, no behavior required
@@ -91,32 +93,38 @@ ipcMain.on('switch-mode', (event, mode) => {
     }
 })
 
-// Stops the current process (delivers a SIGINT signal to the child)
-function stopCurrentProcess(signal = 'SIGINT') {
-    if (currentProcess) {
-        console.log(`Stopping process with PID: ${currentProcess.pid}`)
-        currentProcess.kill(signal)
-        // Set current process to default
-        currentProcess = null
-    }
+// Stops the current process (delivers a SIGTERM signal to the child)
+function stopCurrentProcess(signal = 'SIGTERM') {
+    return new Promise((resolve) => {
+        if (currentProcess) {
+            console.log(`Stopping process with PID: ${currentProcess.pid}`);
+            currentProcess.once('close', () => {
+                console.log('Process fully exited.');
+                currentProcess = null;
+                resolve();
+            });
+            currentProcess.kill(signal);
+        } else {
+            resolve();
+        }
+    });
 }
 
 // IPC listener for the power-off button
-ipcMain.on('power-off', () => {
-    stopCurrentProcess()
+ipcMain.on('power-off', async () => {
+    await stopCurrentProcess()
     exec('sudo poweroff', (error, stdout, stderr) => {
         if (error) {
             console.error(`Power Off Error: ${error.message}`)
-            return
         }
-        // Raspberry Pi will now shutdown...
+        // Raspberry Pi will now shut down...
     })
 })
 
 // Close the application if the output GUI is deactivated
 // This is handy when debugging (closing page on X11 will stop execution)
-app.on('window-all-closed', () => {
-    stopCurrentProcess()
+app.on('window-all-closed', async () => {
+    await stopCurrentProcess()
     app.quit()
 })
 
