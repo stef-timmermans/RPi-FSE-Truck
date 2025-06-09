@@ -17,8 +17,18 @@ python3 -m venv myvenv
 # Activate the virtual environment
 source myvenv/bin/activate
 
+# Install npm (for frontend packages)
+curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.7/install.sh | bash
+export NVM_DIR="$HOME/.nvm"
+source "$NVM_DIR/nvm.sh"
+nvm install --lts
+
+# Install Electron and related packages
+cd camera-control
+npm install
+
 # Install dependencies for depthai general demo
-cd depthai
+cd ../depthai
 python3 -m pip install -r requirements.txt
 
 # Install dependencies for gen2-emotion-recognition
