@@ -55,17 +55,32 @@ ipcMain.on('switch-mode', async (event, mode) => {
             case 'mode-1':
                 // Start the first camera library: DepthAI Demo
                 console.log("\nCalling script for child process #1...")
-                currentProcess = spawn('python', [demoPath], {shell: true})
+                currentProcess = spawn('python', [demoPath], {
+                    shell: true,
+                    detached: true,
+                    stdio: ['ignore', 'pipe', 'pipe']
+                })
+                currentProcess.unref();
                 break
             case 'mode-2':
                 // Start the second camera library: Emotion Recognition
                 console.log("\nCalling script for child process #2...")
-                currentProcess = spawn('python', [emotionPath], {shell: true})
+                currentProcess = spawn('python', [emotionPath], {
+                    shell: true,
+                    detached: true,
+                    stdio: ['ignore', 'pipe', 'pipe']
+                })
+                currentProcess.unref();
                 break
             case 'mode-3':
                 // Start the third camera library: People Counter
                 console.log("\nCalling script for child process #3...")
-                currentProcess = spawn('python', [peoplePath], {shell: true})
+                currentProcess = spawn('python', [peoplePath], {
+                    shell: true,
+                    detached: true,
+                    stdio: ['ignore', 'pipe', 'pipe']
+                })
+                currentProcess.unref();
                 break
             default:
                 // In mode-0, no behavior required
@@ -103,7 +118,12 @@ function stopCurrentProcess(signal = 'SIGTERM') {
                 currentProcess = null;
                 resolve();
             });
-            currentProcess.kill(signal);
+            try {
+                process.kill(-currentProcess.pid, signal);
+            } catch (err) {
+                console.error('Failed to kill process group:', err);
+                resolve();
+            }
         } else {
             resolve();
         }
