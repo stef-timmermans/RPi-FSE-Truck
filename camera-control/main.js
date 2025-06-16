@@ -11,16 +11,17 @@ app.commandLine.appendSwitch('disable-software-rasterizer')
 
 // PiNSIGHT paths (assuming correct install)
 const demoPath = path.join(__dirname, '..', 'depthai', 'depthai_demo.py');
-const emotionPath = path.join(__dirname, '..', 'depthai-experiments', 'gen2-emotion-recognition', 'main.py');
-const ageGenderPath = path.join(__dirname, '..', 'depthai-experiments', 'gen2-age-gender', 'main.py');
-// const peoplePath = path.join(__dirname, '..', 'depthai-experiments', 'gen2-people-counter', 'main.py');
+// const emotionPath = path.join(__dirname, '..', 'depthai-experiments', 'gen2-emotion-recognition', 'main.py');
+// const ageGenderPath = path.join(__dirname, '..', 'depthai-experiments', 'gen2-age-gender', 'main.py');
+const gazeEstimationPath = path.join(__dirname, '..', 'depthai-experiments', 'gen2-gaze-estimation', 'main.py');
+const humanPosePath = path.join(__dirname, '..', 'depthai-experiments', 'gen2-human-pose', 'main.py');
 
 // Environment paths
 const demoEnv = '/home/fse/Documents/Projects/RPi-FSE-Truck/demo-env/bin/python'
-const emotionEnv = '/home/fse/Documents/Projects/RPi-FSE-Truck/emotion-env/bin/python'
-const ageGenderEnv = '/home/fse/Documents/Projects/RPi-FSE-Truck/age-gender-env/bin/python'
-// const peopleEnv = '/home/fse/Documents/Projects/RPi-FSE-Truck/people-env/bin/python'
-
+// const emotionEnv = '/home/fse/Documents/Projects/RPi-FSE-Truck/emotion-env/bin/python'
+// const ageGenderEnv = '/home/fse/Documents/Projects/RPi-FSE-Truck/age-gender-env/bin/python'
+const gazeEstimationEnv = '/home/fse/Documents/Projects/RPi-FSE-Truck/gaze-estimation-env/bin/python'
+const humanPoseEnv = '/home/fse/Documents/Projects/RPi-FSE-Truck/human-pose-env/bin/python'
 
 // Track the current state, starting in mode-0 (no camera program selected)
 let currentMode = 'mode-0'
@@ -75,18 +76,18 @@ ipcMain.on('switch-mode', async (event, mode) => {
                 })
                 break
             case 'mode-2':
-                // Start the second camera library: Emotion Recognition
+                // Start the second camera library: Gaze Estimation
                 console.log("\nCalling script for child process #2...")
-                currentProcess = spawn(emotionEnv, [emotionPath], {
+                currentProcess = spawn(gazeEstimationEnv, [gazeEstimationPath], {
                     shell: true,
                     detached: true,
                     stdio: ['ignore', 'pipe', 'pipe']
                 })
                 break
             case 'mode-3':
-                // Start the third camera library: Age and Gender
+                // Start the third camera library: Human Pose
                 console.log("\nCalling script for child process #3...")
-                currentProcess = spawn(ageGenderEnv, [ageGenderPath], {
+                currentProcess = spawn(humanPoseEnv, [humanPosePath, '-cam'], {
                     shell: true,
                     detached: true,
                     stdio: ['ignore', 'pipe', 'pipe']

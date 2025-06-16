@@ -31,21 +31,22 @@ npm install
 cd ..
 deactivate
 python3 -m venv demo-env
-python3 -m venv emotion-env
-python3 -m venv age-gender-env
-# python3 -m venv people-env
+#python3 -m venv emotion-env
+#python3 -m venv age-gender-env
+python3 -m venv gaze-estimation-env
+python3 -m venv human-pose-env
 
 # Install dependencies for depthai general demo
 source demo-env/bin/activate
 python3 -m pip install -r depthai/requirements.txt
 deactivate
 
-# Install dependencies for gen2-emotion-recognition
-source emotion-env/bin/activate
-python3 -m pip install -r depthai-experiments/gen2-emotion-recognition/requirements.txt
+# Install dependencies for gen2-gaze-estimation
+source gaze-estimation-env/bin/activate
+python3 -m pip install -r depthai-experiments/gen2-gaze-estimation/requirements.txt
 deactivate
 
-# Install dependencies for gen2-age-gender
-source age-gender-env/bin/activate
-python3 -m pip install -r depthai-experiments/gen2-age-gender/requirements.txt
+# Install dependencies for gen2-human-pose
+source human-pose-env/bin/activate
+python3 -m pip install -r depthai-experiments/gen2-human-pose/requirements.txt
 deactivate
