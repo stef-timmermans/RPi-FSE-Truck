@@ -79,7 +79,7 @@ ipcMain.on('switch-mode', async (event, mode) => {
                 // Start the second camera library: Gaze Estimation
                 console.log("\nCalling script for child process #2...")
                 currentProcess = spawn(gazeEstimationEnv, [gazeEstimationPath], {
-                    cwd: gazeEstimationPath,
+                    cwd: path.dirname(gazeEstimationPath),
                     shell: true,
                     detached: true,
                     stdio: ['ignore', 'pipe', 'pipe']
