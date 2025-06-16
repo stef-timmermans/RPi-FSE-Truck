@@ -5,7 +5,7 @@ import cv2
 
 # Try just viewing camera input:
 with OakCamera() as oak:
-    color = oak.create_camera('color', color_order='RGB')
+    color = oak.create_camera('color', colorSpace='rgb')
     oak.visualize(color, callback=lambda packet: cv2.imshow("Raw", packet.frame))
     oak.start(blocking=True)
 
