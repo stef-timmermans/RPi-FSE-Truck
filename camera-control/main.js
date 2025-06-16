@@ -15,9 +15,9 @@ const emotionPath = path.join(__dirname, '..', 'depthai-experiments', 'gen2-emot
 const peoplePath = path.join(__dirname, '..', 'depthai-experiments', 'gen2-people-counter', 'main.py');
 
 // Environment paths
-const demoEnv = '/home/rpi/Documents/Projects/RPi-FSE-Truck/demo-env/bin/python'
-const emotionEnv = '/home/rpi/Documents/Projects/RPi-FSE-Truck/emotion-env/bin/python'
-const peopleEnv = '/home/rpi/Documents/Projects/RPi-FSE-Truck/people-env/bin/python'
+const demoEnv = '/home/fse/Documents/Projects/RPi-FSE-Truck/demo-env/bin/python'
+const emotionEnv = '/home/fse/Documents/Projects/RPi-FSE-Truck/emotion-env/bin/python'
+const peopleEnv = '/home/fse/Documents/Projects/RPi-FSE-Truck/people-env/bin/python'
 
 
 // Track the current state, starting in mode-0 (no camera program selected)
