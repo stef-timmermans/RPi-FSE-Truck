@@ -71,7 +71,6 @@ ipcMain.on('switch-mode', async (event, mode) => {
                     detached: true,
                     stdio: ['ignore', 'pipe', 'pipe']
                 })
-                currentProcess.unref();
                 break
             case 'mode-2':
                 // Start the second camera library: Emotion Recognition
@@ -81,7 +80,6 @@ ipcMain.on('switch-mode', async (event, mode) => {
                     detached: true,
                     stdio: ['ignore', 'pipe', 'pipe']
                 })
-                currentProcess.unref();
                 break
             case 'mode-3':
                 // Start the third camera library: People Counter
@@ -91,7 +89,6 @@ ipcMain.on('switch-mode', async (event, mode) => {
                     detached: true,
                     stdio: ['ignore', 'pipe', 'pipe']
                 })
-                currentProcess.unref();
                 break
             default:
                 // In mode-0, no behavior required
