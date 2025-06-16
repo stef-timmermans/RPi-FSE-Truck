@@ -24,6 +24,11 @@ const peopleEnv = '/home/fse/Documents/Projects/RPi-FSE-Truck/people-env/bin/pyt
 let currentMode = 'mode-0'
 let currentProcess = null
 
+// Sleep for a given time interval (to await camera I/O)
+const sleep = (ms) => new Promise(
+    resolve => setTimeout(resolve, ms)
+);
+
 // Define a window for the GUI
 function createWindow() {
     const win = new BrowserWindow({
@@ -115,25 +120,27 @@ ipcMain.on('switch-mode', async (event, mode) => {
 })
 
 // Stops the current process (delivers a SIGTERM signal to the child)
-function stopCurrentProcess(signal = 'SIGTERM') {
-    return new Promise((resolve) => {
-        if (currentProcess) {
-            console.log(`Stopping process with PID: ${currentProcess.pid}`);
-            currentProcess.once('close', () => {
-                console.log('Process fully exited.');
-                currentProcess = null;
-                resolve();
-            });
-            try {
-                process.kill(-currentProcess.pid, signal);
-            } catch (err) {
-                console.error('Failed to kill process group:', err);
-                resolve();
-            }
-        } else {
+async function stopCurrentProcess(signal = 'SIGTERM') {
+    if (!currentProcess) {
+        return;
+    }
+
+    console.log(`Stopping process with PID: ${currentProcess.pid}`);
+    const proc = currentProcess;
+    currentProcess = null;
+
+    await new Promise((resolve) => {
+        proc.once('close', resolve);
+        try {
+            process.kill(-proc.pid, signal);
+        } catch (err) {
+            console.error('Failed to kill process group:', err);
             resolve();
         }
     });
+    console.log('Process fully exited.');
+    console.log('Sleeping for three seconds...');
+    await sleep(3000);
 }
 
 // IPC listener for the power-off button
