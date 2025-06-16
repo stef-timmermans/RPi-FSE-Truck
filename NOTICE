@@ -1,0 +1,11 @@
+This repository contains a copy of the "depthai-experiments" repository,
+whose source is now "https://github.com/luxonis/oak-examples" and is in
+a much different state than when development on this project began. The
+corresponding subdirectory contains its MIT license--the same license as
+this project--and exists to preserve existing functionality from the
+Electron app and environment setup logic. The corresponding .git folder
+for this logic was removed in this copy.
+
+Future versions of this application should utilize the modern OAK
+libraries with correct flags, and remove the `depthai-experiments`
+subdirectory when possible (as it is very significant in size).
