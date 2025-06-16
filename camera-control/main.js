@@ -140,7 +140,7 @@ async function stopCurrentProcess(signal = 'SIGTERM') {
     });
     console.log('Process fully exited.');
     console.log('Sleeping for three seconds...');
-    await sleep(3000);
+    await sleep(1500);
 }
 
 // IPC listener for the power-off button
