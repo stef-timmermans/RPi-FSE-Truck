@@ -11,7 +11,7 @@ cd ..
 cd depthai-experiments
 cd ..
 
-# Create a Python virtual environment
+# Create the Python virtual environment for the frontend
 python3 -m venv myvenv
 
 # Activate the virtual environment
@@ -27,20 +27,29 @@ nvm install --lts
 cd camera-control
 npm install
 
+# Create separate Python virtual environments for each module
+cd ..
+python3 -m venv .demo-env
+python3 -m venv .emotion-env
+python3 -m venv .people-env
+
 # Install dependencies for depthai general demo
-cd ../depthai
-python3 -m pip install -r requirements.txt
+source .demo-env/bin/activate
+python3 -m pip install -r depthai/requirements.txt
+deactivate
 
 # Install dependencies for gen2-emotion-recognition
-cd ../depthai-experiments/gen2-emotion-recognition
-python3 -m pip install -r requirements.txt
+source .emotion-env/bin/activate
+python3 -m pip install -r depthai-experiments/gen2-emotion-recognition/requirements.txt
+deactivate
 
 # Install dependencies for gen2-people-counter
-cd ../gen2-people-counter
-python3 -m pip install -r requirements.txt
+source .people-env/bin/activate
+python3 -m pip install -r depthai-experiments/gen2-people-counter/requirements.txt
+deactivate
 
 # Return to the root directory
-cd ../..
+cd ..
 
 # Deactivate the virtual environment
 # (As it's assumed that the startup script will

@@ -13,6 +13,11 @@ const demoPath = path.join(__dirname, '..', 'depthai', 'depthai_demo.py');
 const emotionPath = path.join(__dirname, '..', 'depthai-experiments', 'gen2-emotion-recognition', 'main.py');
 const peoplePath = path.join(__dirname, '..', 'depthai-experiments', 'gen2-people-counter', 'main.py');
 
+// Environment paths
+const demoEnv = '/home/rpi/Documents/Projects/RPi-FSE-Truck/.demo-env/bin/activate'
+const emotionEnv = '/home/rpi/Documents/Projects/RPi-FSE-Truck/.emotion-env/bin/activate'
+const peopleEnv = '/home/rpi/Documents/Projects/RPi-FSE-Truck/.people-env/bin/activate'
+
 
 // Track the current state, starting in mode-0 (no camera program selected)
 let currentMode = 'mode-0'
@@ -55,7 +60,7 @@ ipcMain.on('switch-mode', async (event, mode) => {
             case 'mode-1':
                 // Start the first camera library: DepthAI Demo
                 console.log("\nCalling script for child process #1...")
-                currentProcess = spawn('python', [demoPath], {
+                currentProcess = spawn('bash', ['-c', `source "${demoEnv}" && python "${demoPath}"`], {
                     shell: true,
                     detached: true,
                     stdio: ['ignore', 'pipe', 'pipe']
@@ -65,7 +70,7 @@ ipcMain.on('switch-mode', async (event, mode) => {
             case 'mode-2':
                 // Start the second camera library: Emotion Recognition
                 console.log("\nCalling script for child process #2...")
-                currentProcess = spawn('python', [emotionPath], {
+                currentProcess = spawn('bash', ['-c', `source "${emotionEnv}" && python "${emotionPath}"`], {
                     shell: true,
                     detached: true,
                     stdio: ['ignore', 'pipe', 'pipe']
@@ -75,7 +80,7 @@ ipcMain.on('switch-mode', async (event, mode) => {
             case 'mode-3':
                 // Start the third camera library: People Counter
                 console.log("\nCalling script for child process #3...")
-                currentProcess = spawn('python', [peoplePath], {
+                currentProcess = spawn('bash', ['-c', `source "${peopleEnv}" && python "${peoplePath}"`], {
                     shell: true,
                     detached: true,
                     stdio: ['ignore', 'pipe', 'pipe']
