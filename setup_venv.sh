@@ -46,6 +46,6 @@ python3 -m pip install -r depthai-experiments/gen2-emotion-recognition/requireme
 deactivate
 
 # Install dependencies for gen2-age-gender
-source people-env/bin/activate
+source age-gender-env/bin/activate
 python3 -m pip install -r depthai-experiments/gen2-age-gender/requirements.txt
 deactivate
