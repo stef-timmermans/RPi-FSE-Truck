@@ -29,6 +29,7 @@ npm install
 
 # Create separate Python virtual environments for each module
 cd ..
+deactivate
 python3 -m venv demo-env
 python3 -m venv emotion-env
 python3 -m venv people-env
