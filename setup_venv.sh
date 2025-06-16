@@ -29,21 +29,21 @@ npm install
 
 # Create separate Python virtual environments for each module
 cd ..
-python3 -m venv .demo-env
-python3 -m venv .emotion-env
-python3 -m venv .people-env
+python3 -m venv demo-env
+python3 -m venv emotion-env
+python3 -m venv people-env
 
 # Install dependencies for depthai general demo
-source .demo-env/bin/activate
+source demo-env/bin/activate
 python3 -m pip install -r depthai/requirements.txt
 deactivate
 
 # Install dependencies for gen2-emotion-recognition
-source .emotion-env/bin/activate
+source emotion-env/bin/activate
 python3 -m pip install -r depthai-experiments/gen2-emotion-recognition/requirements.txt
 deactivate
 
 # Install dependencies for gen2-people-counter
-source .people-env/bin/activate
+source people-env/bin/activate
 python3 -m pip install -r depthai-experiments/gen2-people-counter/requirements.txt
 deactivate
