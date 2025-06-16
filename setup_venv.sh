@@ -47,11 +47,3 @@ deactivate
 source .people-env/bin/activate
 python3 -m pip install -r depthai-experiments/gen2-people-counter/requirements.txt
 deactivate
-
-# Return to the root directory
-cd ..
-
-# Deactivate the virtual environment
-# (As it's assumed that the startup script will
-# activate the virtual environment)
-deactivate
