@@ -32,7 +32,8 @@ cd ..
 deactivate
 python3 -m venv demo-env
 python3 -m venv emotion-env
-python3 -m venv people-env
+python3 -m venv age-gender-env
+# python3 -m venv people-env
 
 # Install dependencies for depthai general demo
 source demo-env/bin/activate
@@ -44,7 +45,7 @@ source emotion-env/bin/activate
 python3 -m pip install -r depthai-experiments/gen2-emotion-recognition/requirements.txt
 deactivate
 
-# Install dependencies for gen2-people-counter
+# Install dependencies for gen2-age-gender
 source people-env/bin/activate
-python3 -m pip install -r depthai-experiments/gen2-people-counter/requirements.txt
+python3 -m pip install -r depthai-experiments/gen2-age-gender/requirements.txt
 deactivate

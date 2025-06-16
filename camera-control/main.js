@@ -12,12 +12,14 @@ app.commandLine.appendSwitch('disable-software-rasterizer')
 // PiNSIGHT paths (assuming correct install)
 const demoPath = path.join(__dirname, '..', 'depthai', 'depthai_demo.py');
 const emotionPath = path.join(__dirname, '..', 'depthai-experiments', 'gen2-emotion-recognition', 'main.py');
-const peoplePath = path.join(__dirname, '..', 'depthai-experiments', 'gen2-people-counter', 'main.py');
+const ageGenderPath = path.join(__dirname, '..', 'depthai-experiments', 'gen2-age-gender', 'main.py');
+// const peoplePath = path.join(__dirname, '..', 'depthai-experiments', 'gen2-people-counter', 'main.py');
 
 // Environment paths
 const demoEnv = '/home/fse/Documents/Projects/RPi-FSE-Truck/demo-env/bin/python'
 const emotionEnv = '/home/fse/Documents/Projects/RPi-FSE-Truck/emotion-env/bin/python'
-const peopleEnv = '/home/fse/Documents/Projects/RPi-FSE-Truck/people-env/bin/python'
+const ageGenderEnv = '/home/fse/Documents/Projects/RPi-FSE-Truck/age-gender-env/bin/python'
+// const peopleEnv = '/home/fse/Documents/Projects/RPi-FSE-Truck/people-env/bin/python'
 
 
 // Track the current state, starting in mode-0 (no camera program selected)
@@ -82,9 +84,9 @@ ipcMain.on('switch-mode', async (event, mode) => {
                 })
                 break
             case 'mode-3':
-                // Start the third camera library: People Counter
+                // Start the third camera library: Age and Gender
                 console.log("\nCalling script for child process #3...")
-                currentProcess = spawn(peopleEnv, [peoplePath], {
+                currentProcess = spawn(ageGenderEnv, [ageGenderPath], {
                     shell: true,
                     detached: true,
                     stdio: ['ignore', 'pipe', 'pipe']
