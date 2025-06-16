@@ -24,12 +24,7 @@ chmod +x pinsight_install_dependencies.sh
 ./pinsight_install_dependencies.sh
 ```
 
-2. To use the additional software needed for the various output modes, clone the DepthAI experiments repository in the project root:
-```
-git clone https://github.com/luxonis/depthai-experiments.git
-```
-
-3. To allow the Electron application to serve buttons for the touchscreen, run the following:
+2. To allow the Electron application to serve buttons for the touchscreen, run the following:
 ```
 sudo apt update
 sudo apt install nodejs npm
@@ -40,7 +35,7 @@ cd ..
 
 After this, the "frontend" of the application should work in isolation. This can be tested by running `npm start` in the `/camera-control` directory (found in root of repository).
 
-4. To correctly install all dependencies, set up a virtual environment and install all required dependencies depending on modes from `depthai-experiments`. This script creates a single virtual environment for all dependencies, and only needs to be run once:
+3. To correctly install all dependencies, set up a virtual environment and install all required dependencies depending on modes from `depthai-experiments`. This script creates a single virtual environment for all dependencies, and only needs to be run once:
 ```
 ./setup_venv.sh
 ```
