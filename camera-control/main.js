@@ -1,6 +1,7 @@
 const { app, BrowserWindow, ipcMain } = require('electron')
 const { spawn, exec } = require('child_process')
 const path = require('path')
+const inspector = require("node:inspector");
 
 // Disable hardware acceleration
 // Raspberry Pi does not support OpenGL calls
@@ -14,9 +15,9 @@ const emotionPath = path.join(__dirname, '..', 'depthai-experiments', 'gen2-emot
 const peoplePath = path.join(__dirname, '..', 'depthai-experiments', 'gen2-people-counter', 'main.py');
 
 // Environment paths
-const demoEnv = '/home/rpi/Documents/Projects/RPi-FSE-Truck/.demo-env/bin/activate'
-const emotionEnv = '/home/rpi/Documents/Projects/RPi-FSE-Truck/.emotion-env/bin/activate'
-const peopleEnv = '/home/rpi/Documents/Projects/RPi-FSE-Truck/.people-env/bin/activate'
+const demoEnv = '/home/rpi/Documents/Projects/RPi-FSE-Truck/demo-env/bin/python'
+const emotionEnv = '/home/rpi/Documents/Projects/RPi-FSE-Truck/emotion-env/bin/python'
+const peopleEnv = '/home/rpi/Documents/Projects/RPi-FSE-Truck/people-env/bin/python'
 
 
 // Track the current state, starting in mode-0 (no camera program selected)
@@ -60,7 +61,7 @@ ipcMain.on('switch-mode', async (event, mode) => {
             case 'mode-1':
                 // Start the first camera library: DepthAI Demo
                 console.log("\nCalling script for child process #1...")
-                currentProcess = spawn('bash', ['-c', `source "${demoEnv}" && python "${demoPath}"`], {
+                currentProcess = spawn(demoEnv, [demoPath], {
                     shell: true,
                     detached: true,
                     stdio: ['ignore', 'pipe', 'pipe']
@@ -70,7 +71,7 @@ ipcMain.on('switch-mode', async (event, mode) => {
             case 'mode-2':
                 // Start the second camera library: Emotion Recognition
                 console.log("\nCalling script for child process #2...")
-                currentProcess = spawn('bash', ['-c', `source "${emotionEnv}" && python "${emotionPath}"`], {
+                currentProcess = spawn(emotionEnv, [emotionPath], {
                     shell: true,
                     detached: true,
                     stdio: ['ignore', 'pipe', 'pipe']
@@ -80,7 +81,7 @@ ipcMain.on('switch-mode', async (event, mode) => {
             case 'mode-3':
                 // Start the third camera library: People Counter
                 console.log("\nCalling script for child process #3...")
-                currentProcess = spawn('bash', ['-c', `source "${peopleEnv}" && python "${peoplePath}"`], {
+                currentProcess = spawn(peopleEnv, [peoplePath], {
                     shell: true,
                     detached: true,
                     stdio: ['ignore', 'pipe', 'pipe']
