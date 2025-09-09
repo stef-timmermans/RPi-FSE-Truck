@@ -4,8 +4,14 @@ depthai-python/
 pinsight_install_dependencies.sh
 
 # Ignore depthai experiments
-depthai-experiments/
+# This is now intentionally included, as experiments logic
+# needs a re-write, as the new libraries work better but
+# have different commands and file structures. DepthAi
+# Experiments is included in the repository under its
+# MIT License!
+# depthai-experiments/
 
 # Ignore virual environments
 venv/
 myvenv/
+*-env/

@@ -13,9 +13,9 @@ body {
 /* Styling for buttons */
 .button {
     display: inline-block;
-    padding: 20px 40px;
-    margin: 20px;
-    font-size: 24px;
+    padding: 30px 45px;
+    margin: 35px;
+    font-size: 25px;
     color: white;
     background-color: #3b5998;
     border: none;

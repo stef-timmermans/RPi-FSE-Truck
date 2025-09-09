@@ -6,15 +6,17 @@ This repository houses the application for the University of Groningen Faculty o
 
 ## Hardware Dependencies
 
-This application is designed to run on a Raspberry Pi setup, with the following hardware configuration:
+This application is designed to run on a Raspberry Pi setup, with the following hardware configuration (click on the links for official documentation):
 
 - [Raspberry Pi 5](https://www.raspberrypi.com/documentation/)
 - [Arducam PiNSIGHT](https://docs.arducam.com/Raspberry-Pi-Camera/Arducam-PiVistation/Vision-AI-Kit/Arducam-PiNSight/)
 - [Raspberry Pi Touch Display (v1.1)](https://www.raspberrypi.com/documentation/accessories/display.html)
 
+***Note:** The Arducam PiNSIGHT and its related software are considered power-intensive and source documentation recommends using a Raspberry Pi 5 25W power supply (or higher). Arducam mentions other workarounds, but the long-term stability of these is not guaranteed nor has been tested for this project.*
+
 ## Setup Instructions
 
-1. To use the Arducam with DepthAI software, run the following commands:
+1. Per the aforementioned source documentation, to use the Arducam with DepthAI software, run the following commands in the project root:
 
 ```
 wget https://github.com/ArduCAM/arducam_ppa/releases/download/v1.0.2/pinsight_install_dependencies.sh
@@ -22,32 +24,23 @@ chmod +x pinsight_install_dependencies.sh
 ./pinsight_install_dependencies.sh
 ```
 
-2. To use the additional software needed for the various output modes, clone the DepthAI experiments repository in the project root:
-```
-git clone https://github.com/luxonis/depthai-experiments.git
-```
-
-3. To allow the Electron application to serve buttons for the touchscreen, run the following:
+2. To allow the Electron application to serve buttons for the touchscreen, run the following:
 ```
 sudo apt update
 sudo apt install nodejs npm
+cd camera-control
+npm install
+cd ..
 ```
 
-After this, the "frontend" of the application should work in isolation. This can be tested by running `npm start` in the `camera-control/` directory (found in root of repository). If all of the following appropriate steps in this document have been followed, `npm start` should run the entire application as a whole.
+After this, the "frontend" of the application should work in isolation. This can be tested by running `npm start` in the `/camera-control` directory (found in root of repository).
 
-4. To correctly install all dependencies, set up a virtual environment and install all required dependencies depending on modes from `depthai-experiments`. These instructions create an environment named `myvenv`.
+3. To correctly install all dependencies, set up a virtual environment and install all required dependencies depending on modes from `depthai-experiments`. This script creates a single virtual environment for all dependencies, and only needs to be run once:
 ```
-python3 -m venv myvenv
-source myvenv/bin/activate
-cd depthai-experiments/gen2-emotion-recognition
-python3 -m pip install -r requirements.txt
-cd ../gen2-people-counter
-python3 -m pip install -r requirements.txt
-cd ../..
-# List still being finalized...
+./setup_venv.sh
 ```
 
-To leave the venv enter `deactivate`. To re-enter, type `source myvenv/bin/activate`.
+The script automatically leaves the environment via `deactivate`. To re-activate, enter `source myvenv/bin/activate`.
 
 ## Starting Application From Boot
 
