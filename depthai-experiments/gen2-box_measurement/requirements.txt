@@ -1,3 +1,0 @@
-depthai_sdk==1.15
-open3d
-depthai-viewer==0.2.4
